@@ -7,7 +7,7 @@ on:
   # 定时触发：每天北京时间早上7点运行
   # 注意：GitHub Actions使用UTC时间，UTC+8小时=北京时间
   schedule:
-    - cron: '50 0 * * *'  # UTC时间23点 = 北京时间早上7点
+    - cron: '50 1 * * *'  # UTC时间23点 = 北京时间早上7点
   
   # 手动触发：允许在GitHub网页上手动运行工作流
   workflow_dispatch:
