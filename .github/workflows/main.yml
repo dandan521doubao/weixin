@@ -1,87 +1,74 @@
-# 工作流名称：每日微信推送（可自定义）
-name: 每日微信定时推送
+# 每日上午11点微信定时推送工作流
+# 文件名：.github/workflows/daily-wechat-push.yml（需放在仓库对应路径下）
+name: 每日11点微信自动推送
 
-# 触发条件配置
+# 工作流触发规则
 on:
-  # 1. 定时触发：使用 UTC 时间（北京时间 = UTC + 8）
-  # 北京时间上午 11 点 → UTC 时间凌晨 3 点，cron 格式：分 时 日 月 周
+  # 1. 定时触发：GitHub默认UTC时区，北京时间=UTC+8，故北京时间11点对应UTC 3点
+  # cron格式：分 时 日 月 周 → 0 3 * * * 表示每天UTC 3点（即北京时间11点）执行
   schedule:
-    - cron: '15 2 * * *'  # 含义：每天 UTC 3:00（即北京时间 11:00）执行
-  # 2. 手动触发：方便测试（在 GitHub 仓库「Actions」页面可手动点击运行）
+    - cron: '5 3 * * *'
+  # 2. 手动触发：在GitHub仓库「Actions」页面可手动点击运行，用于测试程序是否正常
   workflow_dispatch:
 
-# 任务配置（单个任务：执行推送逻辑）
+# 定义核心任务（仅1个任务：执行推送程序）
 jobs:
-  push-message:
-    # 运行环境：选择 Ubuntu 最新版（稳定、通用）
+  execute-push:
+    # 任务运行环境：选择最新版Ubuntu系统（稳定、兼容性强，适配Python程序）
     runs-on: ubuntu-latest
-    
-    # 任务步骤（按顺序执行）
+
+    # 任务执行步骤（按顺序执行，无多余步骤）
     steps:
       ###########################################################################
-      # 步骤 1：检出 GitHub 仓库代码（将仓库内容下载到运行环境）
+      # 步骤1：检出GitHub仓库代码
+      # 作用：将仓库中已有的文件（main.py、config.txt、requirements.txt等）下载到运行环境
       ###########################################################################
       - name: 检出仓库代码
-        uses: actions/checkout@v4  # 使用官方检出工具，v4 为最新稳定版
+        uses: actions/checkout@v4  # 官方代码检出工具，v4为最新稳定版本
         with:
-          fetch-depth: 1  # 仅拉取最新一次提交（减少耗时）
+          fetch-depth: 1  # 仅拉取最新一次提交记录，减少下载耗时
 
       ###########################################################################
-      # 步骤 2：设置 Python 环境（程序基于 Python 开发，需匹配版本）
+      # 步骤2：配置Python运行环境
+      # 作用：搭建与本地一致的Python环境，确保依赖包能正常安装和运行
       ###########################################################################
-      - name: 配置 Python 环境
-        uses: actions/setup-python@v5  # 官方 Python 环境配置工具
+      - name: 设置Python环境
+        uses: actions/setup-python@v5  # 官方Python环境配置工具
         with:
-          python-version: '3.9'  # 匹配程序依赖的 Python 版本（3.8+ 均可，3.9 最兼容）
-          cache: 'pip'  # 缓存 pip 依赖（下次运行更快）
+          python-version: '3.9'  # 推荐版本（兼容requirements.txt中的requests和zhdate，3.8+均可）
+          cache: 'pip'  # 缓存pip依赖包，下次运行时无需重新下载，提升速度
 
       ###########################################################################
-      # 步骤 3：生成配置文件 config.txt（核心！敏感信息从 GitHub Secrets 读取）
-      # 注意：原 config.txt 含 app_id、API 密钥等敏感信息，不可直接上传 GitHub！
-      # 需在 GitHub 仓库「Settings → Secrets and variables → Actions」中提前配置 Secrets
+      # 步骤3：安装Python依赖包
+      # 作用：根据requirements.txt安装程序所需的第三方库（requests、zhdate）
       ###########################################################################
-      #- name: 生成敏感配置文件 config.txt
-       # run: |
-        #  # 用 echo 命令创建 config.txt，内容从 GitHub Secrets 读取（避免硬编码敏感信息）
-         # echo "{" > config.txt
-          #echo '    "app_id": "${{ secrets.APP_ID }}",' >> config.txt          # 微信公众号 app_id
-    #      echo '    "app_secret": "${{ secrets.APP_SECRET }}",' >> config.txt  # 微信公众号 app_secret
-     #     echo '    "template_id": "${{ secrets.TEMPLATE_ID }}",' >> config.txt# 微信模板消息 ID
-     #     echo '    "user": ["${{ secrets.USER_OPENID }}"],' >> config.txt     # 接收者微信 openid（数组格式）
-     #     echo '    "province": "${{ secrets.PROVINCE }}",' >> config.txt      # 省份（如「北京」）
-     #     echo '    "city": "${{ secrets.CITY }}",' >> config.txt              # 城市（如「北京」）
-     #     echo '    "love_date": "${{ secrets.LOVE_DATE }}",' >> config.txt    # 恋爱纪念日（如「2022-04-23」）
-     #     echo '    "birthday1": "${{ secrets.BIRTHDAY1 }}",' >> config.txt    # 生日1（农历前加 r，如「r1998-07-16」）
-     #     echo '    "birthday2": "${{ secrets.BIRTHDAY2 }}",' >> config.txt    # 生日2（格式同上）
-     #     echo '    "lizhi_API": "${{ secrets.LIZHI_API }}",' >> config.txt    # 励志名言 API 密钥
-     #     echo '    "Whether_Eng": "${{ secrets.WHETHER_ENG }}",' >> config.txt# 是否启用英文金句（「是」或「否」）
-     #     echo '    "caihongpi_API": "${{ secrets.CAIHONGPI_API }}",' >> config.txt# 彩虹屁 API 密钥
-     #     echo '    "health_API": "${{ secrets.HEALTH_API }}",' >> config.txt  # 健康提示 API 密钥
-     #     echo '    "tianqi_API": "${{ secrets.TIANQI_API }}",' >> config.txt  # 天气 API 密钥
-     #     echo '    "lucky_API": "${{ secrets.LUCKY_API }}",' >> config.txt    # 运势 API 密钥（程序中暂未用，保留）
-     #     echo '    "astro": "${{ secrets.ASTRO }}"' >> config.txt             # 星座（如「处女座」）
-     #     echo "}" >> config.txt
-
-          # 可选：验证 config.txt 是否生成成功（运行日志中可查看）
-          cat config.txt
-#
-      ###########################################################################
-      # 步骤 4：安装 Python 依赖（程序依赖 requests、zhdate，从 requirements.txt 读取）
-      ###########################################################################
-      - name: 安装 Python 依赖包
+      - name: 安装程序依赖
         run: |
-          # 升级 pip（避免依赖安装失败）
+          # 升级pip工具到最新版，避免因旧版pip导致依赖安装失败
           python -m pip install --upgrade pip
-          # 安装 requirements.txt 中的所有依赖
+          # 读取requirements.txt并安装所有依赖
           pip install -r requirements.txt
 
       ###########################################################################
-      # 步骤 5：执行主程序 main.py，触发微信推送
+      # 步骤4：执行推送主程序
+      # 作用：运行main.py，触发微信推送逻辑（使用仓库中已有的config.txt配置，不额外生成）
       ###########################################################################
-      - name: 运行推送程序
-        run: |
-          # 执行 Python 主脚本
-          python main.py
+      - name: 运行微信推送脚本
+        run: python main.py  # 直接执行主程序
         env:
-          # 可选：设置时区为北京时间（避免程序中时间计算偏差）
+          # 设置运行环境时区为北京时间（避免程序中日期/时间计算出现偏差，如生日、恋爱天数）
           TZ: Asia/Shanghai
+
+# 关键操作提示（用户必看）
+# 1. 文件确认：确保仓库中已上传以下文件，且路径正确（根目录即可）：
+#    - main.py（推送核心代码）
+#    - config.txt（已包含app_id、API密钥等配置，无需修改）
+#    - requirements.txt（已包含requests和zhdate依赖）
+# 2. 敏感信息可选优化（非必需）：
+#    若担心config.txt中的app_secret、API密钥等信息泄露，可将这些敏感值迁移到GitHub Secrets（仓库→Settings→Secrets and variables→Actions），
+#    并修改main.py中读取配置的逻辑（从环境变量读取Secrets），但按您要求“不生成配置文件”，当前方案无需改动。
+# 3. 测试方法：
+#    配置完成后，进入GitHub仓库「Actions」页面，找到本工作流（名称：每日11点微信自动推送），
+#    点击右侧「Run workflow」手动触发一次运行，查看日志（绿色对勾表示成功，红色叉号表示失败）。
+# 4. 时区说明：
+#    若需调整推送时间，只需修改cron表达式（如北京时间9点对应UTC 1点，cron改为'0 1 * * *'），格式严格遵循“分 时 日 月 周”。
