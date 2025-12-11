@@ -1,0 +1,18 @@
+{
+    "app_id": "wx49ab2cb66a0dff6e",
+    "app_secret": "d7842788cbb70373cbfa47e98c60be63",
+    "template_id": "2BbU2mthYCIngkjdvEk5L4XoggDBeKy9a06kVAlDT6s",
+    "user": ["otYJy2PNLOYgoikOsrZanYfscLno"],
+    "province": "北京",
+    "city": "北京",
+    "love_date": "2022-04-23",
+    "birthday1": "r1998-07-16",
+    "birthday2": "r1994-02-19",
+    "lizhi_API": "ba28dee8ed014c7eb54ef958bb7d4b78",
+    "Whether_Eng": "是",
+    "caihongpi_API": "ba28dee8ed014c7eb54ef958bb7d4b78",
+    "health_API": "ba28dee8ed014c7eb54ef958bb7d4b78",
+    "tianqi_API": "ba28dee8ed014c7eb54ef958bb7d4b78",
+    "lucky_API": "ba28dee8ed014c7eb54ef958bb7d4b78",
+    "astro": "处女座"
+}
