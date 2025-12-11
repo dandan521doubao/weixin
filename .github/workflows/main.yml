@@ -41,7 +41,7 @@ jobs:
       - name: 设置时区
         run: |
           # 将上海时区文件复制到系统时区位置
-          sudo cp /usr/share/zoneinfo/Asia/Beijing /etc/localtime
+          sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           # 更新时区配置文件
           echo "Asia/Shanghai" | sudo tee /etc/timezone
           # 验证时区设置
