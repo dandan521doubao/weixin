@@ -40,31 +40,31 @@ jobs:
       # 注意：原 config.txt 含 app_id、API 密钥等敏感信息，不可直接上传 GitHub！
       # 需在 GitHub 仓库「Settings → Secrets and variables → Actions」中提前配置 Secrets
       ###########################################################################
-      - name: 生成敏感配置文件 config.txt
-        run: |
-          # 用 echo 命令创建 config.txt，内容从 GitHub Secrets 读取（避免硬编码敏感信息）
-          echo "{" > config.txt
-          echo '    "app_id": "${{ secrets.APP_ID }}",' >> config.txt          # 微信公众号 app_id
-          echo '    "app_secret": "${{ secrets.APP_SECRET }}",' >> config.txt  # 微信公众号 app_secret
-          echo '    "template_id": "${{ secrets.TEMPLATE_ID }}",' >> config.txt# 微信模板消息 ID
-          echo '    "user": ["${{ secrets.USER_OPENID }}"],' >> config.txt     # 接收者微信 openid（数组格式）
-          echo '    "province": "${{ secrets.PROVINCE }}",' >> config.txt      # 省份（如「北京」）
-          echo '    "city": "${{ secrets.CITY }}",' >> config.txt              # 城市（如「北京」）
-          echo '    "love_date": "${{ secrets.LOVE_DATE }}",' >> config.txt    # 恋爱纪念日（如「2022-04-23」）
-          echo '    "birthday1": "${{ secrets.BIRTHDAY1 }}",' >> config.txt    # 生日1（农历前加 r，如「r1998-07-16」）
-          echo '    "birthday2": "${{ secrets.BIRTHDAY2 }}",' >> config.txt    # 生日2（格式同上）
-          echo '    "lizhi_API": "${{ secrets.LIZHI_API }}",' >> config.txt    # 励志名言 API 密钥
-          echo '    "Whether_Eng": "${{ secrets.WHETHER_ENG }}",' >> config.txt# 是否启用英文金句（「是」或「否」）
-          echo '    "caihongpi_API": "${{ secrets.CAIHONGPI_API }}",' >> config.txt# 彩虹屁 API 密钥
-          echo '    "health_API": "${{ secrets.HEALTH_API }}",' >> config.txt  # 健康提示 API 密钥
-          echo '    "tianqi_API": "${{ secrets.TIANQI_API }}",' >> config.txt  # 天气 API 密钥
-          echo '    "lucky_API": "${{ secrets.LUCKY_API }}",' >> config.txt    # 运势 API 密钥（程序中暂未用，保留）
-          echo '    "astro": "${{ secrets.ASTRO }}"' >> config.txt             # 星座（如「处女座」）
-          echo "}" >> config.txt
+      #- name: 生成敏感配置文件 config.txt
+       # run: |
+        #  # 用 echo 命令创建 config.txt，内容从 GitHub Secrets 读取（避免硬编码敏感信息）
+         # echo "{" > config.txt
+          #echo '    "app_id": "${{ secrets.APP_ID }}",' >> config.txt          # 微信公众号 app_id
+    #      echo '    "app_secret": "${{ secrets.APP_SECRET }}",' >> config.txt  # 微信公众号 app_secret
+     #     echo '    "template_id": "${{ secrets.TEMPLATE_ID }}",' >> config.txt# 微信模板消息 ID
+     #     echo '    "user": ["${{ secrets.USER_OPENID }}"],' >> config.txt     # 接收者微信 openid（数组格式）
+     #     echo '    "province": "${{ secrets.PROVINCE }}",' >> config.txt      # 省份（如「北京」）
+     #     echo '    "city": "${{ secrets.CITY }}",' >> config.txt              # 城市（如「北京」）
+     #     echo '    "love_date": "${{ secrets.LOVE_DATE }}",' >> config.txt    # 恋爱纪念日（如「2022-04-23」）
+     #     echo '    "birthday1": "${{ secrets.BIRTHDAY1 }}",' >> config.txt    # 生日1（农历前加 r，如「r1998-07-16」）
+     #     echo '    "birthday2": "${{ secrets.BIRTHDAY2 }}",' >> config.txt    # 生日2（格式同上）
+     #     echo '    "lizhi_API": "${{ secrets.LIZHI_API }}",' >> config.txt    # 励志名言 API 密钥
+     #     echo '    "Whether_Eng": "${{ secrets.WHETHER_ENG }}",' >> config.txt# 是否启用英文金句（「是」或「否」）
+     #     echo '    "caihongpi_API": "${{ secrets.CAIHONGPI_API }}",' >> config.txt# 彩虹屁 API 密钥
+     #     echo '    "health_API": "${{ secrets.HEALTH_API }}",' >> config.txt  # 健康提示 API 密钥
+     #     echo '    "tianqi_API": "${{ secrets.TIANQI_API }}",' >> config.txt  # 天气 API 密钥
+     #     echo '    "lucky_API": "${{ secrets.LUCKY_API }}",' >> config.txt    # 运势 API 密钥（程序中暂未用，保留）
+     #     echo '    "astro": "${{ secrets.ASTRO }}"' >> config.txt             # 星座（如「处女座」）
+     #     echo "}" >> config.txt
 
           # 可选：验证 config.txt 是否生成成功（运行日志中可查看）
           cat config.txt
-
+#
       ###########################################################################
       # 步骤 4：安装 Python 依赖（程序依赖 requests、zhdate，从 requirements.txt 读取）
       ###########################################################################
