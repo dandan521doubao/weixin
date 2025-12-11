@@ -7,7 +7,7 @@ on:
   # 1. 定时触发：GitHub默认UTC时区，北京时间=UTC+8，故北京时间11点对应UTC 3点
   # cron格式：分 时 日 月 周 → 0 3 * * * 表示每天UTC 3点（即北京时间11点）执行
   schedule:
-    - cron: '25 3 * * *'
+    - cron: '0 4 * * *'
   # 2. 手动触发：在GitHub仓库「Actions」页面可手动点击运行，用于测试程序是否正常
   workflow_dispatch:
 
